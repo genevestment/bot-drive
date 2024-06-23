@@ -9,7 +9,7 @@ type-analyze:
 update: format
 	pip install -e .
 
-test-all: type-analyze test
+test-all: clean type-analyze test
 
 test: update
 	coverage run --omit=./tests/* -m unittest discover -s tests -v && coverage report -m --include=./*

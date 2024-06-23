@@ -25,22 +25,23 @@ def main():
     while True:
         try:
             channel_input = read_rc_input(ser, channel_input)
-            # Debounce unstable signal
-            if channel_input.ch1 == 0:
+            # Debounce unstable signal, use multiple channels to double check.
+            if int(channel_input.channels[1]) == 0 or int(channel_input.channels[5]) == 0:
                 continue
         except Exception as e:
-            print(f'Error reading rc input: {e}')
+            print(f'Error reading RC input: {e}')
 
-        if channel_input and int(channel_input.ch5) < 1100:
+        if channel_input and channel_input.channels[5] < 1100:
             motors.manual_drive(channel_input=channel_input)
+            print(f'Motors status\n{motors}\n')
         else:
             print('auto drive')
 
-        # NEcessary buffer delay to allow time for the RC input to read new data.
+        # Necessary buffer delay to allow time for the RC input to read new data.
         time.sleep(0.02)
 
 
-if __main__ == '__main__':
+if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
