@@ -95,19 +95,23 @@ class Motors:
         return speed_multiplier
 
     def left_front_motor(self, channel_input):
-        self.left_front = self._up_right_wheel_orientation_drive(channel_input=channel_input)
+        self.left_front = round(self._up_right_wheel_orientation_drive(channel_input=channel_input),
+                                2)
 
     def right_front_motor(self, channel_input):
-        self.right_front = self._up_left_wheel_orientation_drive(channel_input=channel_input)
+        self.right_front = round(self._up_left_wheel_orientation_drive(channel_input=channel_input),
+                                 2)
 
     def left_back_motor(self, channel_input):
-        self.left_back = self._up_left_wheel_orientation_drive(channel_input=channel_input)
+        self.left_back = round(self._up_left_wheel_orientation_drive(channel_input=channel_input),
+                               2)
 
     def right_back_motor(self, channel_input):
-        self.right_back = self._up_right_wheel_orientation_drive(channel_input=channel_input)
+        self.right_back = round(self._up_right_wheel_orientation_drive(channel_input=channel_input),
+                                2)
 
     def manual_drive(self, channel_input):
-        print(f'Manual drive with input: {channel_input}')
+        # print(f'Manual drive with input: {channel_input}')
         self.left_front_motor(channel_input)
         self.right_front_motor(channel_input)
         self.left_back_motor(channel_input)

@@ -33,7 +33,7 @@ def main():
 
         if channel_input and channel_input.channels[5] < 1100:
             motors.manual_drive(channel_input=channel_input)
-            print(f'Motors status\n{motors}\n')
+            print(f'Motors status: {motors}')
         else:
             print('auto drive')
 
