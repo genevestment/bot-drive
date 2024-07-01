@@ -6,8 +6,6 @@ import time
 from drive.motor import Motors
 from drive.remote_control import ChannelInput
 
-# The global pigpio instance
-pi = None
 controller_pins = {
     'left_front': 26,  # GPIO 26, physical pin 37, left front motor controller
     'right_front': 19,  # GPIO 19, physical pin 35, right front motor controller
@@ -26,7 +24,7 @@ def init_hardware():
         pi.set_PWM_frequency(pin, 500)
         pi.set_PWM_range(pin, 255)
 
-    return ser
+    return ser, pi
 
 
 def read_rc_input(ser, channel_input: ChannelInput):
@@ -36,7 +34,7 @@ def read_rc_input(ser, channel_input: ChannelInput):
 
 
 def main():
-    ser = init_hardware()
+    ser, pi = init_hardware()
     channel_input = ChannelInput()
     motors = Motors()
     while True:

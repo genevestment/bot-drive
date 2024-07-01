@@ -1,6 +1,6 @@
 import pigpio
 
-_MOTOR_NEUTRAL = 188
+_MOTOR_NEUTRAL = 192
 
 
 class Motors:
@@ -109,7 +109,7 @@ class Motors:
         pi.set_PWM_dutycycle(pin, int(speed))
 
     def _up_right_wheel_speed(self, pi, pin, speed_multiplier):
-        speed = _MOTOR_NEUTRAL + (speed_multiplier * 60)
+        speed = _MOTOR_NEUTRAL - (speed_multiplier * 60)
         print(f'{pin} speed: {speed}')
         if speed <= 0:
             speed = 1
