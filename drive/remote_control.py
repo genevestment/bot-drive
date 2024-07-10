@@ -1,12 +1,16 @@
 class ChannelInputPosition:
 
-    def __init__(self, low, high):
+    def __init__(self, low, high, rc_min, rc_max):
         self.neutral_low = low
         self.neutral_high = high
         # Offset by 1 to avoid divide by 0 problem.
         self.lowest = low - 1
         # Offset by 1 to avoid divide by 0 problem.
         self.highest = high + 1
+        # rc_min is the lowest possible min value defined for the input.
+        self.min = rc_min
+        # rc_max is the highest possible max value defined for the input.
+        self.max = rc_max
 
     def __repr__(self):
         return f'Channel neutral position low: {self.neutral_low}, lowest: {self.lowest}, high: {self.neutral_high}, highest: {self.highest}'
@@ -20,19 +24,23 @@ class ChannelInput:
         self.channels = [0, 0, 0, 0, 0, 0]
         self.channels_position = [
             None,
-            ChannelInputPosition(1350, 1550),
-            ChannelInputPosition(1350, 1550),
-            ChannelInputPosition(1900, 2100),
-            ChannelInputPosition(1350, 1550),
-            ChannelInputPosition(800, 1000),
+            ChannelInputPosition(low=1350, max=1550, rc_min=1200, rc_max=1750),
+            ChannelInputPosition(low=1350, max=1550, rc_min=1200, rc_max=1750),
+            ChannelInputPosition(low=1900, max=2100, rc_min=1750, rc_max=2250),
+            ChannelInputPosition(low=1350, max=1550, rc_min=1200, rc_max=1750),
+            ChannelInputPosition(low=800, max=1000, rc_min=800, rc_max=1600),
         ]
 
     def set_rc_position_boundary(self, channel_input: int,
                                  channel_input_position: ChannelInputPosition):
         if channel_input > channel_input_position.highest:
             channel_input_position.highest = channel_input
+            if channel_input_position.highest > channel_input_position.max:
+                channel_input_position.highest = channel_input_position.max
         elif channel_input < channel_input_position.lowest:
             channel_input_position.lowest = channel_input
+            if channel_input_position.lowest < channel_input_position.min:
+                channel_input_position.lowest = channel_input_position.min
 
     def read_channel_input(self, input_line: bytes):
         line = input_line.decode('utf-8').rstrip()
