@@ -1,5 +1,3 @@
-import pigpio
-
 _MOTOR_NEUTRAL = 192
 
 
@@ -99,47 +97,44 @@ class Motors:
             speed_multiplier = ch1_speed_multiplier + ch2_speed_multiplier
         return speed_multiplier
 
-    def _up_left_wheel_speed(self, pi, pin, speed_multiplier):
-        speed = _MOTOR_NEUTRAL + (speed_multiplier * 60)
-        print(f'{pin} speed: {speed}')
+    def _speed_limiter(self, speed: float) -> float:
         if speed <= 0:
             speed = 1
         elif speed >= 255:
             speed = 254
-        pi.set_PWM_dutycycle(pin, int(speed))
-
-    def _up_right_wheel_speed(self, pi, pin, speed_multiplier):
-        speed = _MOTOR_NEUTRAL - (speed_multiplier * 60)
-        print(f'{pin} speed: {speed}')
-        if speed <= 0:
-            speed = 1
-        elif speed >= 255:
-            speed = 254
-        pi.set_PWM_dutycycle(pin, int(speed))
+        return speed
 
     def left_front_motor(self, pi, channel_input, controller_pin):
         self.left_front = round(self._up_right_wheel_orientation_drive(channel_input=channel_input),
                                 2)
         print(f'left front = {self.left_front}')
-        self._up_left_wheel_speed(pi=pi, pin=controller_pin, speed_multiplier=self.left_front)
+        speed = self._speed_limiter(_MOTOR_NEUTRAL + (self.left_front * 60))
+        print(f'{controller_pin} speed: {speed}')
+        pi.set_PWM_dutycycle(controller_pin, int(speed))
 
     def right_front_motor(self, pi, channel_input, controller_pin):
         self.right_front = round(self._up_left_wheel_orientation_drive(channel_input=channel_input),
                                  2)
         print(f'right front = {self.right_front}')
-        self._up_right_wheel_speed(pi=pi, pin=controller_pin, speed_multiplier=self.right_front)
+        speed = self._speed_limiter(_MOTOR_NEUTRAL - (self.right_front * 60))
+        print(f'{controller_pin} speed: {speed}')
+        pi.set_PWM_dutycycle(controller_pin, int(speed))
 
     def left_back_motor(self, pi, channel_input, controller_pin):
         self.left_back = round(self._up_left_wheel_orientation_drive(channel_input=channel_input),
                                2)
         print(f'left back = {self.left_back}')
-        self._up_right_wheel_speed(pi=pi, pin=controller_pin, speed_multiplier=self.left_back)
+        speed = self._speed_limiter(_MOTOR_NEUTRAL + (self.left_back * 60))
+        print(f'{controller_pin} speed: {speed}')
+        pi.set_PWM_dutycycle(controller_pin, int(speed))
 
     def right_back_motor(self, pi, channel_input, controller_pin):
         self.right_back = round(self._up_right_wheel_orientation_drive(channel_input=channel_input),
                                 2)
         print(f'right back = {self.right_back}')
-        self._up_left_wheel_speed(pi=pi, pin=controller_pin, speed_multiplier=self.right_back)
+        speed = self._speed_limiter(_MOTOR_NEUTRAL - (self.right_back * 60))
+        print(f'{controller_pin} speed: {speed}')
+        pi.set_PWM_dutycycle(controller_pin, int(speed))
 
     def manual_drive(self, pi, channel_input, controller_pins):
         # print(f'Manual drive with input: {channel_input}')

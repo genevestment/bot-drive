@@ -9,8 +9,8 @@ from drive.remote_control import ChannelInput
 controller_pins = {
     'left_front': 26,  # GPIO 26, physical pin 37, left front motor controller
     'right_front': 19,  # GPIO 19, physical pin 35, right front motor controller
-    'left_back': 13,  # GPIO 13, physical pin 33, left back motor controller
-    'right_back': 6,  # GPIO 6, physical pin 31, right back motor controller
+    'left_back': 6,  # GPIO 13, physical pin 31, left back motor controller
+    'right_back': 13,  # GPIO 6, physical pin 33, right back motor controller
 }
 
 
